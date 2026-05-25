@@ -1,14 +1,11 @@
 # RELATÓRIO DE ATIVIDADE
 ## Medição de Tempo na Multiplicação de Matrizes: Computação Paralela
 
-**Disciplina:** Computação paralela e distribuída
-**Aluno(a):** Maria Eduarda Mariano Coelho  
-
 ---
 
 ## AVISO AO PROFESSOR (JUSTIFICATIVA DE ESCOPO)
 
-> Conforme o enunciado original da atividade, os experimentos deveriam variar os tamanhos das matrizes entre $1000 \times 1000$ até $10000 \times 10000$. Contudo, devido à alta carga computacional necessária para processar essas dimensões na versão sequencial ($O(n^3)$) e às limitações severas de hardware e tempo do ambiente de desenvolvimento em nuvem utilizado (GitHub Codespaces), os testes com dimensões a partir de $1000 \times 1000$ travaram a CPU por estouro de tempo de execução. [cite_start]Para viabilizar a coleta de dados e realizar a análise comparativa de forma fidedigna, os tamanhos das matrizes foram adaptados para $200 \times 200$, $400 \times 400$ e $800 \times 800$ [cite: 27][cite_start], mantendo a variação proposta de threads (2, 4 e 8)[cite: 28].
+> Conforme o enunciado original da atividade, os experimentos deveriam variar os tamanhos das matrizes entre $1000 \times 1000$ até $10000 \times 10000$. Contudo, devido à alta carga computacional necessária para processar essas dimensões na versão sequencial ($O(n^3)$) e às limitações severas de hardware e tempo do ambiente de desenvolvimento em nuvem utilizado (GitHub Codespaces), os testes com dimensões a partir de $1000 \times 1000$ travaram a CPU por estouro de tempo de execução. Para viabilizar a coleta de dados e realizar a análise comparativa de forma fidedigna, os tamanhos das matrizes foram adaptados para $200 \times 200$, $400 \times 400$ e $800 \times 800$, mantendo a variação proposta de threads (2, 4 e 8).
 
 ---
 
