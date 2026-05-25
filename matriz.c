@@ -24,6 +24,13 @@ void inicializar(double *m, int n) {
         m[i] = rand() % 10;
 }
 
+// ✅ Função auxiliar para medir tempo real (wall time)
+double get_wall_time() {
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return ts.tv_sec + ts.tv_nsec / 1e9;
+}
+
 // Multiplicação sequencial
 void multiplicacao_sequencial(double *A, double *B, double *C, int n) {
     for (int i = 0; i < n; i++) {
@@ -55,20 +62,20 @@ void* multiplicacao_paralela(void *arg) {
     pthread_exit(NULL);
 }
 
-// Tempo seq
+// ✅ Tempo sequencial usando wall time
 double tempo_seq(double *A, double *B, double *C, int n) {
-    clock_t ini = clock();
+    double ini = get_wall_time();
     multiplicacao_sequencial(A, B, C, n);
-    return (double)(clock() - ini) / CLOCKS_PER_SEC;
+    return get_wall_time() - ini;
 }
 
-// Tempo paralelo
+// ✅ Tempo paralelo usando wall time
 double tempo_par(double *A, double *B, double *C, int n, int nt) {
 
     pthread_t threads[MAX_THREADS];
     ThreadData dados[MAX_THREADS];
 
-    clock_t ini = clock();
+    double ini = get_wall_time();
 
     for (int i = 0; i < nt; i++) {
         dados[i].id = i;
@@ -85,15 +92,14 @@ double tempo_par(double *A, double *B, double *C, int n, int nt) {
         pthread_join(threads[i], NULL);
     }
 
-    return (double)(clock() - ini) / CLOCKS_PER_SEC;
+    return get_wall_time() - ini;
 }
 
 int main() {
 
-    int tamanhos[] = {1000, 2000, 4000};
-    int threads[] = {2, 4, 8};
-    //int tamanhos[] = {200, 400, 800}; teste com numero menor
-    //int threads[] = {2, 4, 8}; teste com numero menor
+    int tamanhos[] = {200, 400, 800};
+    int threads[]  = {2, 4, 8};
+    int num_repeticoes = 10; // ✅ mínimo exigido pelo enunciado
 
     FILE *csv = fopen("resultados.csv", "w");
     fprintf(csv, "Dimensao,Threads,Tempo_Seq,Tempo_Par,Speedup,Eficiencia\n");
@@ -120,28 +126,27 @@ int main() {
         inicializar(A, n);
         inicializar(B, n);
 
+        // ✅ 10 repetições para o sequencial
         double t_seq = 0;
-
-        for (int i = 0; i < 3; i++) // reduzido pra não travar
+        for (int i = 0; i < num_repeticoes; i++)
             t_seq += tempo_seq(A, B, C, n);
-
-        t_seq /= 3;
+        t_seq /= num_repeticoes;
 
         for (int j = 0; j < 3; j++) {
 
             int nt = threads[j];
             double t_par = 0;
 
-            for (int i = 0; i < 3; i++)
+            // ✅ 10 repetições para o paralelo
+            for (int i = 0; i < num_repeticoes; i++)
                 t_par += tempo_par(A, B, C, n, nt);
-
-            t_par /= 3;
+            t_par /= num_repeticoes;
 
             double speedup = t_seq / t_par;
             double eficiencia = speedup / nt;
 
             // tabela
-            printf("| %4dx%-4d | %7d | %9.2f | %9.2f | %7.2f | %10.2f |\n",
+            printf("| %4dx%-4d | %7d | %9.4f | %9.4f | %7.2f | %10.2f |\n",
                    n, n, nt, t_seq, t_par, speedup, eficiencia);
 
             // csv

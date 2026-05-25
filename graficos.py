@@ -41,4 +41,7 @@ plt.ylabel("Eficiência")
 plt.title("Eficiência")
 plt.legend()
 plt.grid()
-plt.savefig("eficiencia.png")
+plt.savefig("eficiencia.png")  # ✅ estava faltando
+plt.clf()
+
+print("Gráficos gerados: tempo_execucao.png, speedup.png, eficiencia.png")
